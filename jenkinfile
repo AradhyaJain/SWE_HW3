@@ -1,0 +1,107 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define environment variables for Docker and Kubernetes
+        DOCKER_IMAGE = 'ajain30/survey-docker'      // Docker image name
+        DOCKER_REGISTRY = 'docker.io'               // Docker registry (Docker Hub)
+        DOCKER_REGISTRY_CREDENTIALS = 'dockerhub-credentials' // Jenkins DockerHub credentials
+        KUBERNETES_DEPLOYMENT = 'survey'            // Kubernetes Deployment name
+        KUBERNETES_SERVICE = 'survey-nodeport'      // Kubernetes Service name (for external access)
+        KUBERNETES_NAMESPACE = 'default'            // Kubernetes Namespace
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo 'Checking out code from GitHub repository...'
+                // Checkout the latest code from the GitHub repository
+                checkout scm
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                echo 'Building the project with Maven...'
+                // Run Maven to build the Java application (Spring Boot JAR)
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                script {
+                    // Build the Docker image using the Dockerfile in the repository
+                    sh """
+                    docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
+                    """
+                }
+            }
+        }
+
+        stage('Login to Docker Registry') {
+            steps {
+                echo 'Logging in to Docker registry...'
+                script {
+                    // Login to Docker Hub using the credentials stored in Jenkins
+                    withCredentials([usernamePassword(credentialsId: DOCKER_REGISTRY_CREDENTIALS, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh """
+                        echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USER} --password-stdin
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                echo 'Pushing Docker image to Docker registry...'
+                script {
+                    // Push the newly built Docker image to Docker Hub
+                    sh """
+                    docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                echo 'Deploying Docker image to Kubernetes...'
+                script {
+                    // Apply the deployment and service YAML files from the repository
+                    sh """
+                    kubectl apply -f deployment.yaml --namespace=${KUBERNETES_NAMESPACE}
+                    kubectl apply -f service.yaml --namespace=${KUBERNETES_NAMESPACE}
+                    """
+
+                    // Update the Kubernetes Deployment with the new Docker image
+                    sh """
+                    kubectl set image deployment/${KUBERNETES_DEPLOYMENT} container-0=${DOCKER_IMAGE}:${BUILD_NUMBER} --namespace=${KUBERNETES_NAMESPACE}
+                    kubectl rollout status deployment/${KUBERNETES_DEPLOYMENT} --namespace=${KUBERNETES_NAMESPACE}
+                    """
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                echo 'Verifying Kubernetes deployment...'
+                script {
+                    // Check the status of the pods to ensure they are running
+                    sh "kubectl get pods --namespace=${KUBERNETES_NAMESPACE}"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed! Please check the logs for errors.'
+        }
+    }
+}
