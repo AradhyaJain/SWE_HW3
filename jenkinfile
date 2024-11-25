@@ -9,6 +9,7 @@ pipeline {
         KUBERNETES_DEPLOYMENT = 'survey'            // Kubernetes Deployment name
         KUBERNETES_SERVICE = 'survey-nodeport'      // Kubernetes Service name (for external access)
         KUBERNETES_NAMESPACE = 'default'            // Kubernetes Namespace
+        JAVA_HOME = '/usr/lib/jvm/jdk-23.0.1'
     }
 
     stages {
@@ -24,7 +25,10 @@ pipeline {
             steps {
                 echo 'Building the project with Maven...'
                 // Run Maven to build the Java application (Spring Boot JAR)
-                sh 'mvn clean package'
+                sh '''#!/bin/bash
+                    export JAVA_HOME=$JAVA_HOME
+                    mvn clean package
+                '''
             }
         }
 
