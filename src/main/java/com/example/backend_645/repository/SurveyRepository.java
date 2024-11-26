@@ -1,15 +1,8 @@
-////package com.example.studentsurvey.repository;
-////
-////public interface SurveyRepository {
-////}
-//
-//package com.example.studentsurvey.repository;
-//
-//import com.example.studentsurvey.model.Survey;
-//import org.springframework.data.jpa.repository.JpaRepository;
-//
-//public interface SurveyRepository extends JpaRepository<Survey, Long> {
-//}
+// Developer: Aradhya Jain (G01462086)
+// Developer: Gayatri Ramchandra Vaidya (G01460522)
+// Developer: Sanath Kumar Parimi (G01442785)
+// Developer: Saksham Nayyar (G01462522)
+
 
 package com.example.backend_645.repository;
 
