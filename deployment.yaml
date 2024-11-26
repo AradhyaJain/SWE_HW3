@@ -1,161 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: '2024-11-21T01:33:35Z'
-  generation: 3
-  labels:
-    workload.user.cattle.io/workloadselector: apps.deployment-default-survey
-  managedFields:
-    - apiVersion: apps/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:labels:
-            .: {}
-            f:workload.user.cattle.io/workloadselector: {}
-        f:spec:
-          f:progressDeadlineSeconds: {}
-          f:replicas: {}
-          f:revisionHistoryLimit: {}
-          f:selector: {}
-          f:strategy:
-            f:rollingUpdate:
-              .: {}
-              f:maxSurge: {}
-              f:maxUnavailable: {}
-            f:type: {}
-          f:template:
-            f:metadata:
-              f:labels:
-                .: {}
-                f:workload.user.cattle.io/workloadselector: {}
-              f:namespace: {}
-            f:spec:
-              f:containers:
-                k:{"name":"container-0"}:
-                  .: {}
-                  f:image: {}
-                  f:imagePullPolicy: {}
-                  f:name: {}
-                  f:ports:
-                    .: {}
-                    k:{"containerPort":8080,"protocol":"TCP"}:
-                      .: {}
-                      f:containerPort: {}
-                      f:name: {}
-                      f:protocol: {}
-                  f:resources: {}
-                  f:securityContext:
-                    .: {}
-                    f:allowPrivilegeEscalation: {}
-                    f:privileged: {}
-                    f:readOnlyRootFilesystem: {}
-                    f:runAsNonRoot: {}
-                  f:terminationMessagePath: {}
-                  f:terminationMessagePolicy: {}
-              f:dnsPolicy: {}
-              f:restartPolicy: {}
-              f:schedulerName: {}
-              f:securityContext: {}
-              f:terminationGracePeriodSeconds: {}
-      manager: agent
-      operation: Update
-      time: '2024-11-25T23:21:32Z'
-    - apiVersion: apps/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:deployment.kubernetes.io/revision: {}
-        f:status:
-          f:availableReplicas: {}
-          f:conditions:
-            .: {}
-            k:{"type":"Available"}:
-              .: {}
-              f:lastTransitionTime: {}
-              f:lastUpdateTime: {}
-              f:message: {}
-              f:reason: {}
-              f:status: {}
-              f:type: {}
-            k:{"type":"Progressing"}:
-              .: {}
-              f:lastTransitionTime: {}
-              f:lastUpdateTime: {}
-              f:message: {}
-              f:reason: {}
-              f:status: {}
-              f:type: {}
-          f:observedGeneration: {}
-          f:readyReplicas: {}
-          f:replicas: {}
-          f:updatedReplicas: {}
-      manager: k3s
-      operation: Update
-      subresource: status
-      time: '2024-11-25T23:21:39Z'
-  name: survey
-  namespace: default
-  resourceVersion: '93341'
-  uid: 2aa593a9-2569-4642-bd25-ca10c6ec000c
+  name: survey-deployment
 spec:
-  progressDeadlineSeconds: 600
   replicas: 3
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
-      workload.user.cattle.io/workloadselector: apps.deployment-default-survey
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+      app: survey
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        workload.user.cattle.io/workloadselector: apps.deployment-default-survey
-      namespace: default
+        app: survey
     spec:
       containers:
-        - image: ajain30/survey-docker
-          imagePullPolicy: Always
-          name: container-0
-          ports:
-            - containerPort: 8080
-              name: survey-svc
-              protocol: TCP
-          resources: {}
-          securityContext:
-            allowPrivilegeEscalation: false
-            privileged: false
-            readOnlyRootFilesystem: false
-            runAsNonRoot: false
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
-status:
-  availableReplicas: 3
-  conditions:
-    - lastTransitionTime: '2024-11-21T01:37:16Z'
-      lastUpdateTime: '2024-11-21T01:37:16Z'
-      message: Deployment has minimum availability.
-      reason: MinimumReplicasAvailable
-      status: 'True'
-      type: Available
-    - lastTransitionTime: '2024-11-21T01:33:35Z'
-      lastUpdateTime: '2024-11-25T23:21:39Z'
-      message: ReplicaSet "survey-5976767874" has successfully progressed.
-      reason: NewReplicaSetAvailable
-      status: 'True'
-      type: Progressing
-  observedGeneration: 3
-  readyReplicas: 3
-  replicas: 3
-  updatedReplicas: 3
+      - name: survey-container
+        image: ajain30/survey-docker:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
