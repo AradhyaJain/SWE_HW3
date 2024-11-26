@@ -1,55 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: '2024-11-21T01:33:35Z'
-  managedFields:
-    - apiVersion: v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:labels:
-            .: {}
-        f:spec:
-          f:externalTrafficPolicy: {}
-          f:internalTrafficPolicy: {}
-          f:ports:
-            .: {}
-            k:{"port":8080,"protocol":"TCP"}:
-              .: {}
-              f:name: {}
-              f:nodePort: {}
-              f:port: {}
-              f:protocol: {}
-              f:targetPort: {}
-          f:selector: {}
-          f:sessionAffinity: {}
-          f:type: {}
-      manager: agent
-      operation: Update
-      time: '2024-11-21T01:33:35Z'
-  name: survey-nodeport
-  namespace: default
-  resourceVersion: '8199'
-  uid: cd9e29c5-87cd-479a-936e-9e2473d6cab6
+  name: survey-service
 spec:
-  clusterIP: 10.43.149.81
-  clusterIPs:
-    - 10.43.149.81
-  externalTrafficPolicy: Cluster
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-    - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-    - name: survey-svc
-      nodePort: 30022
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
   selector:
-    workload.user.cattle.io/workloadselector: apps.deployment-default-survey
-  sessionAffinity: None
+    app: survey
   type: NodePort
-status:
-  loadBalancer: {}
-
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30022
