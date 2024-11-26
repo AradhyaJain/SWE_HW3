@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: survey-service
+  name: survey-svc
 spec:
   selector:
     app: survey
