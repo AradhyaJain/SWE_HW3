@@ -1,10 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: '2'
-    field.cattle.io/publicEndpoints: >-
-      [{"addresses":["172.31.21.95"],"port":30022,"protocol":"TCP","serviceName":"default:survey-nodeport","allNodes":true}]
   creationTimestamp: '2024-11-21T01:33:35Z'
   generation: 3
   labels:
@@ -14,8 +10,6 @@ metadata:
       fieldsType: FieldsV1
       fieldsV1:
         f:metadata:
-          f:annotations:
-            f:field.cattle.io/publicEndpoints: {}
           f:labels:
             .: {}
             f:workload.user.cattle.io/workloadselector: {}
