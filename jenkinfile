@@ -82,7 +82,7 @@ pipeline {
 
                     // Update the Kubernetes Deployment with the new Docker image
                     sh """
-                    kubectl set image deployment/${KUBERNETES_DEPLOYMENT} container-0=${DOCKER_IMAGE}:${BUILD_NUMBER} --namespace=${KUBERNETES_NAMESPACE}
+                    kubectl set image deployment/${KUBERNETES_DEPLOYMENT} survey-container=${DOCKER_IMAGE}:${BUILD_NUMBER} --namespace=${KUBERNETES_NAMESPACE}
                     kubectl rollout status deployment/${KUBERNETES_DEPLOYMENT} --namespace=${KUBERNETES_NAMESPACE}
                     """
                 }
