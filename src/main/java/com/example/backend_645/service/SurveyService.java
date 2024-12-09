@@ -50,7 +50,8 @@ public class SurveyService {
         return surveyRepository.findById(id).map(existingSurvey -> {
             existingSurvey.setFirstName(surveyDetails.getFirstName());
             existingSurvey.setLastName(surveyDetails.getLastName());
-            existingSurvey.setAddress(surveyDetails.getStreetAddress());
+            // existingSurvey.setAddress(surveyDetails.getStreetAddress());
+            existingSurvey.setAddress(surveyDetails.getAddress());
             existingSurvey.setCity(surveyDetails.getCity());
             existingSurvey.setState(surveyDetails.getState());
             existingSurvey.setZip(surveyDetails.getZip());
