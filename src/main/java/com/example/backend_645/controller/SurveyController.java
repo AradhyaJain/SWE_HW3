@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
+@CrossOrigin(origins = "http://localhost:8080")  // Allow requests from the Vue frontend running locally
 @RestController
 @RequestMapping("/survey")
 public class SurveyController {
