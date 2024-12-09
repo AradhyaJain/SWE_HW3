@@ -16,6 +16,7 @@ class Backend645ApplicationTests {
 		//Test Change 1
 		//Test Change 2
 		//Test Change 3
+		// Test Change with Frontend using VUE.js
 	}
 
 }
